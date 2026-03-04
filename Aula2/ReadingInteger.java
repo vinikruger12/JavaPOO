@@ -14,7 +14,7 @@ public class ReadingInteger {
             }
             catch(InputMismatchException e){
                 System.out.println(("Voce deve digitar um inteiro"));
-                in.next();
+                in.nextLine();
             }
         }
         
