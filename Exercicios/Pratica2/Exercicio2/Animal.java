@@ -31,7 +31,7 @@ public class Animal {
         this.especie = especie;
     }
     public String getEspecie() {
-        return this.especie;
+        return especie;
     }
 
 }

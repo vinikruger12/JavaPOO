@@ -30,6 +30,10 @@ public class SistemaPetShop {
         int x = in.nextInt();
         x--;
         in.nextLine();
+        if(this.veterinarios[x].getNome() == null){
+            System.out.println("Veterinário não cadastrado!");
+            return;
+        }
 
         System.out.println("Digite a rua do veterinário: ");
         String rua = in.nextLine();
@@ -70,6 +74,11 @@ public class SistemaPetShop {
         int x = in.nextInt();
         in.nextLine();
         x--;
+        if(this.veterinarios[x].getNome() == null){
+            System.out.println("Veterinário não cadastrado!");
+            return;
+        }
+       
 
         System.out.println("Digite o nome do animal: ");
         String nome = in.nextLine();
@@ -95,6 +104,11 @@ public class SistemaPetShop {
         int x = in.nextInt();
         in.nextLine();
         x--;
+        
+        if(this.veterinarios[x].getNome() == null){
+            System.out.println("Veterinário não cadastrado!");
+            return;
+        }
 
         System.out.println("O veterinário " + this.veterinarios[x].getNome() + " cuida desses animais: ");
         for(int i = 0;i < this.veterinarios[x].getQuantidadeAnimais();i++){
@@ -122,6 +136,14 @@ public class SistemaPetShop {
         in.nextLine();
         x--;
         y--;
+        if(this.veterinarios[x].getNome() == null){
+            System.out.println("Veterinário não cadastrado!");
+            return;
+        }
+        if(this.veterinarios[x].getAnimais(y) == null){
+            System.out.println("Animal não cadastrado!");
+            return;
+        }
 
         Dono aux = new Dono();
         System.out.println("Digite o nome do dono: ");
@@ -156,6 +178,19 @@ public class SistemaPetShop {
         in.nextLine();
         x--;
         y--;
+        
+        if(this.veterinarios[x].getNome() == null){
+            System.out.println("Veterinário");
+            return;
+        }
+        if(this.veterinarios[x].getAnimais(y) == null){
+            System.out.println("Animal não cadastrado!");
+            return;
+        }
+        if(this.veterinarios[x].getAnimais(y).getDono() == null){
+            System.out.println("Dono não cadastrado!");
+            return;
+        }
         
         System.out.println("Dono: " + this.veterinarios[x].getAnimais(y).getDono().getNome() + " com o cpf: " + this.veterinarios[x].getAnimais(y).getDono().getCpf());
         

@@ -9,7 +9,7 @@ public class Main {
         int opcao;
 
         do {
-            System.out.println("\n===== SISTEMA PET SHOP =====");
+            System.out.println("SISTEMA PET SHOP");
             System.out.println("1 - Cadastrar Veterinário");
             System.out.println("2 - Mostrar Veterinários");
             System.out.println("3 - Cadastrar Endereço do Veterinário");
