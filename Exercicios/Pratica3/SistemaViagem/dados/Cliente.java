@@ -1,3 +1,5 @@
+package dados;
+
 public class Cliente{
     private String cpf;
     private String nome;
@@ -40,7 +42,11 @@ public class Cliente{
         return this.quantReservas;
     }
 
-    public boolean cadastrarReservas(Reserva reserva){
+    public Reserva[] getReservas() {
+        return this.reservas;
+    }
+
+    public boolean reservarIda(Reserva reserva){
         if(quantReservas < reservas.length){
             reservas[quantReservas] = reserva;
             quantReservas++;
@@ -49,16 +55,24 @@ public class Cliente{
         return false;
     }
 
-    public void reservaIda(Reserva reserva){
-
+    public boolean reservarVolta(Reserva ida, Reserva volta){
+    if(quantReservas < reservas.length){
+        reservas[quantReservas] = volta; 
+        ida.setVolta(volta);
+        quantReservas++;
+        return true;
     }
-
-    public void reservarVolta(Reserva ida, Reserva volta){
-
-    }
+    return false;
+}
 
     public String toString(){
-        return "CPF: " + this.cpf + ", Nome: " + this.cpf + ", Endereço: " + this.endereco + ", Telefone: " + this.telefone + "Reservas " + this.reservas;
+
+        String reservs = "";
+        for(int i = 0; i < quantReservas; i++){
+            reservs += "\n  - " + reservas[i];
+        }
+
+        return "CPF: " + this.cpf + ", Nome: " + this.nome + ", Endereço: " + this.endereco + ", Telefone: " + this.telefone + "Reservas: " + reservs;
     }
 
 

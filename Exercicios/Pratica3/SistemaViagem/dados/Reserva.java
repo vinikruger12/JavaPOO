@@ -1,3 +1,5 @@
+package dados;
+
 public class Reserva {
     private int numReserva;
     private String dataVoo;
@@ -31,13 +33,6 @@ public class Reserva {
     }
     public void setHoraVoo(String horaVoo) {
         this.horaVoo = horaVoo;
-    }
-
-    public Boolean getIdaEvolta() {
-        return this.idaEvolta;
-    }
-    public void setIdaEvolta(Boolean idaEvolta) {
-        this.idaEvolta = idaEvolta;
     }
 
     public int getNumReserva() {
@@ -80,8 +75,12 @@ public class Reserva {
     }
     public void setVolta(Reserva volta) {
         this.volta = volta;
+        this.idaEvolta = true;
     }
 
+    public boolean isIdaEVolta(){
+        return this.idaEvolta;
+    }
 
     public String toString(){
         return "Número reserva: " + this.numReserva + ", Data do voo: " + this.dataVoo + ", Hora do voo: " + this.horaVoo + ", Preco: " + this.preco + ", Classe do voo: " + this.classeVoo + ", Ida e Volta: " + this.idaEvolta + ", Poltrona: " + this.poltrona + ", Cidade de origem: " + this.origem + ", Cidade de destino: " + this.destino + ", Volta: " + this.volta;
