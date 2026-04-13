@@ -2,9 +2,8 @@ package dados;
 
 public class Contato {
 
-
     private String nome;
-    private int telefone;
+    private String telefone;
 
     public Contato(){}
 
@@ -15,25 +14,25 @@ public class Contato {
         this.nome = nome;
     }
 
-    public int getTelefone() {
+    public String getTelefone() {
         return this.telefone;
     }
-    public void setTelefone(int telefone) {
+    public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
 
     
     public String toString() {
-        return "Contato [nome=" + nome + ", telefone=" + telefone + ", toString()=" + super.toString() + "]";
+        return "Contato [nome=" + nome + ", telefone=" + telefone + " ]";
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;        
-        if (obj == null || getClass() != obj.getClass()) return false;        
-        Contato outroContato = (Contato) obj;
-        
-        return this.telefone == outroContato.telefone && this.nome.equals(outroContato.nome);
+        if(obj instanceof Contato){
+            Contato c = (Contato) obj;
+            if(nome.equals(c.getNome()) && telefone.equals(c.getTelefone())) return true; 
+        }
+        return false;
     }
 
     

@@ -6,7 +6,7 @@ public class ListaTelefonica {
     private Map<Character, List<Contato>> listaDeContatos = new HashMap<Character, List<Contato>>();
 
     public void adicionarContato(Contato contato){
-        Character letra = Character.valueOf(contato.getNome().charAt(0));
+        Character letra = Character.valueOf(contato.getNome().toUpperCase().charAt(0));
         
         if(this.listaDeContatos.get(letra) == null){
             List<Contato> novaLista = new ArrayList<Contato>();

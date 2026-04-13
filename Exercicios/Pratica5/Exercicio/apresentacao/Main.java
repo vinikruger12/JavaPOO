@@ -58,7 +58,7 @@ public class Main {
         user.setNome(in.nextLine());
 
         System.out.println("Digite o telefone do usuário");
-        user.setTelefone(Integer.parseInt(in.nextLine()));
+        user.setTelefone((in.nextLine()));
         
         return user;
     }
@@ -91,7 +91,7 @@ public class Main {
         user.setNome(in.nextLine());
 
         System.out.println("Digite o telefone do usuário do usuário escolhido");
-        user.setTelefone(Integer.parseInt(in.nextLine()));
+        user.setTelefone(in.nextLine());
         
         lista.removerContato(user);
         System.out.println("Comando de remoção enviado.");
