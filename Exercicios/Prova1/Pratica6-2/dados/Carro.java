@@ -24,4 +24,15 @@ public class Carro extends Veiculo {
         " \n Número de portas: " + this.numeroPortas;
     }
 
+    public boolean equals(Object o){
+        
+        if(o instanceof Carro){
+            Carro c = (Carro) o;
+            if(this.combustivel.equals(c.getCombustivel())
+                && this.numeroPortas == c.getNumeroPortas()
+                && super.cor.equals(c.getCor())) return true;
+        }
+        return false;
+    }
+
 }
