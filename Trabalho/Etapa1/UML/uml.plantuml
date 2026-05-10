@@ -1,0 +1,198 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 200
+skinparam ranksep 240
+skinparam padding 10
+
+<style>
+class {
+  BackgroundColor #EAF3DE
+  LineColor #639922
+}
+package {
+  BackgroundColor #F4FBED
+  LineColor #97C459
+}
+enum {
+  BackgroundColor #FAEEDA
+  LineColor #BA7517
+}
+</style>
+
+package "negocio" {
+  class Sistema {
+    - mesas : List<Mesa>
+    - itensCardapio : List<ItemCardapio>
+    - garcons : List<Garcom>
+    - reservas : List<Reserva>
+    - pedidos : List<Pedido>
+    
+    + cadastrarMesa(numero: int, capacidade: int, loc: LocalizacaoMesa) : Mesa
+    + cadastrarGarcom(nome: String, cpf: String, data: LocalDate, com: double) : Garcom
+    + cadastrarItemCardapio(cod: String, nome: String, desc: String, preco: double, tempo: int, cat: CategoriaItem) : ItemCardapio
+    + buscarMesaDisponivel(capacidadeDesejada: int, data: LocalDate, hora: LocalTime) : List<Mesa>
+    + fazerReserva(nomeCliente: String, telefone: String, data: LocalDate, hora: LocalTime, numPessoas: int, obs: String, mesas: List<Mesa>) : Reserva
+    + abrirPedido(mesa: Mesa, garcom: Garcom) : Pedido
+    + abrirPedidoDelivery(endereco: String, taxa: double) : PedidoDelivery
+    + adicionarItemAoPedido(pedido: Pedido, item: ItemCardapio, qtd: int, obs: String) : ItemPedido
+    + atualizarStatusCozinha(itemPedido: ItemPedido, status: StatusItemPedido) : void
+    + fecharConta(pedido: Pedido, incluirTaxa: boolean) : double
+    + receberPagamento(pedido: Pedido, forma: FormaPagamento, valor: double) : Pagamento
+  }
+}
+
+package "dados" {
+  enum LocalizacaoMesa {
+    SALAO
+    VARANDA
+    MEZANINO
+  }
+  enum StatusReserva {
+    PENDENTE
+    CONFIRMADA
+    EM_ANDAMENTO
+    FINALIZADA
+    CANCELADA
+  }
+  enum CategoriaItem {
+    ENTRADAS
+    PRATOS_PRINCIPAIS
+    SOBREMESAS
+    BEBIDAS_ALCOOLICAS
+    BEBIDAS_NAO_ALCOOLICAS
+  }
+  enum StatusItemPedido {
+    AGUARDANDO_PREPARO
+    EM_PREPARO
+    PRONTO
+    SERVIDO
+  }
+  enum FormaPagamento {
+    DINHEIRO
+    CARTAO_CREDITO
+    CARTAO_DEBITO
+    PIX
+  }
+  enum StatusEntrega {
+    PREPARANDO
+    SAIU_PARA_ENTREGA
+    ENTREGUE
+  }
+
+  class Mesa {
+    - localizacao : LocalizacaoMesa
+    - numero : int
+    - capacidadePessoas : int
+    + Mesa(numero: int, capacidade: int, loc: LocalizacaoMesa)
+    + getNumero() : int
+    + getCapacidadePessoas() : int
+    + getLocalizacao() : LocalizacaoMesa
+    + setLocalizacao(loc : LocalizacaoMesa) : void
+  }
+  
+  class Garcom {
+    - nome : String
+    - cpf : String
+    - dataAdmissao : LocalDate
+    - percentualComissao : double
+    + Garcom(nome: String, cpf: String, data: LocalDate, comissao: double)
+    + getNome() : String
+    + getCpf() : String
+    + getPercentualComissao() : double
+  }
+  
+  class ItemCardapio {
+    - categoria : CategoriaItem
+    - componentes : List<ItemCardapio>
+    - codigo : String
+    - nome : String
+    - descricao : String
+    - preco : double
+    - tempoMedioPreparo : int
+    - disponivel : boolean
+    + ItemCardapio(codigo: String, nome: String, preco: double, categoria: CategoriaItem)
+    + getPreco() : double
+    + isDisponivel() : boolean
+    + setDisponivel(status: boolean) : void
+  }
+  
+  class Reserva {
+    - status : StatusReserva
+    - mesas : List<Mesa>
+    - nomeCliente : String
+    - telefone : String
+    - data : LocalDate
+    - hora : LocalTime
+    - numeroPessoas : int
+    - observacoes : String
+    + Reserva(cliente: String, data: LocalDate, hora: LocalTime, mesas: List<Mesa>)
+    + getStatus() : StatusReserva
+    + setStatus(status: StatusReserva) : void
+  }
+  
+  class ItemPedido {
+    - statusPreparo : StatusItemPedido
+    - itemCardapio : ItemCardapio
+    - quantidade : int
+    - observacoesCliente : String
+    + ItemPedido(item: ItemCardapio, qtd: int, obs: String)
+    + calcularSubtotal() : double
+    + setStatusPreparo(status : StatusItemPedido) : void
+  }
+  
+  class Pagamento {
+    - formaUtilizada : FormaPagamento
+    - data : LocalDate
+    - hora : LocalTime
+    - valorPago : double
+    + Pagamento(forma: FormaPagamento, valor: double)
+    + getValorPago() : double
+  }
+  
+  class Pedido {
+    - dataHoraAbertura : LocalDateTime
+    - mesa : Mesa
+    - garcom : Garcom
+    - itensPedido : List<ItemPedido>
+    - pagamentos : List<Pagamento>
+    + Pedido(mesa: Mesa, garcom: Garcom)
+    + adicionarItem(item : ItemPedido) : void
+    + adicionarPagamento(pag : Pagamento) : void
+    + calcularTotal(incluirTaxa: boolean) : double
+  }
+  
+  class PedidoDelivery {
+    - statusEntrega : StatusEntrega
+    - enderecoEntrega : String
+    - taxaEntrega : double
+    + PedidoDelivery(endereco: String, taxa: double)
+    + calcularTotal(incluirTaxa: boolean) : double
+    + setStatusEntrega(status : StatusEntrega) : void
+  }
+}
+
+Pedido <|-- PedidoDelivery
+
+Sistema --> "0..*" Mesa : -mesas
+Sistema --> "0..*" ItemCardapio : -itensCardapio
+Sistema --> "0..*" Garcom : -garcons
+Sistema --> "0..*" Reserva : -reservas
+Sistema --> "0..*" Pedido : -pedidos
+
+Reserva "1" o-- "1..*" Mesa : -mesas
+Pedido "1" *-- "1..*" ItemPedido : -itensPedido
+Pedido "1" *-- "0..*" Pagamento : -pagamentos
+Pedido --> "1" Mesa : -mesa
+Pedido --> "1" Garcom : -garcom
+ItemPedido --> "1" ItemCardapio : -itemCardapio
+ItemCardapio "1" *-- "0..*" ItemCardapio : -componentes
+
+Mesa ..> LocalizacaoMesa : -localizacao
+Reserva ..> StatusReserva : -status
+ItemCardapio ..> CategoriaItem : -categoria
+ItemPedido ..> StatusItemPedido : -statusPreparo
+Pagamento ..> FormaPagamento : -formaUtilizada
+PedidoDelivery ..> StatusEntrega : -statusEntrega
+
+@enduml
