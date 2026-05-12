@@ -21,6 +21,25 @@ enum {
 </style>
 
 package "negocio" {
+  class Main {
+    - in : Scanner
+    - sistema : Sistema
+    + {static} main(args: String[]) : void
+    ~ run() : void
+    ~ menu() : void
+    + cadastrarMesa() : void
+    + cadastrarGarcom() : void
+    + cadastrarItemCardapio() : void
+    + buscarMesaDisponivel() : void
+    + fazerReserva() : void
+    + abrirPedido() : void
+    + adicionarItemAoPedido() : void
+    + fecharContaEPagar() : void
+    + mostrarTodasAsMesas() : void
+    + mostrarTodosOsGarcons() : void
+    + mostrarTodosOsItensCardapio() : void
+  }
+
   class Sistema {
     - mesas : List<Mesa>
     - itensCardapio : List<ItemCardapio>
@@ -28,17 +47,23 @@ package "negocio" {
     - reservas : List<Reserva>
     - pedidos : List<Pedido>
     
-    + cadastrarMesa(numero: int, capacidade: int, loc: LocalizacaoMesa) : Mesa
-    + cadastrarGarcom(nome: String, cpf: String, data: LocalDate, com: double) : Garcom
-    + cadastrarItemCardapio(cod: String, nome: String, desc: String, preco: double, tempo: int, cat: CategoriaItem) : ItemCardapio
-    + buscarMesaDisponivel(capacidadeDesejada: int, data: LocalDate, hora: LocalTime) : List<Mesa>
-    + fazerReserva(nomeCliente: String, telefone: String, data: LocalDate, hora: LocalTime, numPessoas: int, obs: String, mesas: List<Mesa>) : Reserva
-    + abrirPedido(mesa: Mesa, garcom: Garcom) : Pedido
-    + abrirPedidoDelivery(endereco: String, taxa: double) : PedidoDelivery
-    + adicionarItemAoPedido(pedido: Pedido, item: ItemCardapio, qtd: int, obs: String) : ItemPedido
+    + getMesas() : List<Mesa>
+    + getItensCardapio() : List<ItemCardapio>
+    + getGarcons() : List<Garcom>
+    + getReservas() : List<Reserva>
+    + getPedidos() : List<Pedido>
+    + cadastrarMesa(mesa: Mesa) : void
+    + cadastrarGarcom(garcom: Garcom) : void
+    + cadastrarItemCardapio(itemCardapio: ItemCardapio) : void
+    + buscarMesaDisponivel(capacidadeDesejada: int, data: String, hora: String) : List<Mesa>
+    - isMesaLivre(mesa: Mesa, data: String, hora: String) : boolean
+    + fazerReserva(reserva: Reserva) : void
+    + abrirPedido(pedido: Pedido) : void
+    + abrirPedidoDelivery(pedidoDelivery: PedidoDelivery) : void
+    + adicionarItemAoPedido(itemPedido: ItemPedido, pedido: Pedido) : void
     + atualizarStatusCozinha(itemPedido: ItemPedido, status: StatusItemPedido) : void
     + fecharConta(pedido: Pedido, incluirTaxa: boolean) : double
-    + receberPagamento(pedido: Pedido, forma: FormaPagamento, valor: double) : Pagamento
+    + receberPagamento(pagamento: Pagamento, pedido: Pedido) : void
   }
 }
 
@@ -84,22 +109,17 @@ package "dados" {
     - localizacao : LocalizacaoMesa
     - numero : int
     - capacidadePessoas : int
-    + Mesa(numero: int, capacidade: int, loc: LocalizacaoMesa)
-    + getNumero() : int
-    + getCapacidadePessoas() : int
-    + getLocalizacao() : LocalizacaoMesa
-    + setLocalizacao(loc : LocalizacaoMesa) : void
+    + toString() : String
+    + equals(obj: Object) : boolean
   }
   
   class Garcom {
     - nome : String
     - cpf : String
-    - dataAdmissao : LocalDate
+    - dataAdmissao : String
     - percentualComissao : double
-    + Garcom(nome: String, cpf: String, data: LocalDate, comissao: double)
-    + getNome() : String
-    + getCpf() : String
-    + getPercentualComissao() : double
+    + toString() : String
+    + equals(obj: Object) : boolean
   }
   
   class ItemCardapio {
@@ -111,10 +131,9 @@ package "dados" {
     - preco : double
     - tempoMedioPreparo : int
     - disponivel : boolean
-    + ItemCardapio(codigo: String, nome: String, preco: double, categoria: CategoriaItem)
-    + getPreco() : double
-    + isDisponivel() : boolean
-    + setDisponivel(status: boolean) : void
+    + adicionarComponente(item: ItemCardapio) : void
+    + toString() : String
+    + equals(obj: Object) : boolean
   }
   
   class Reserva {
@@ -122,13 +141,12 @@ package "dados" {
     - mesas : List<Mesa>
     - nomeCliente : String
     - telefone : String
-    - data : LocalDate
-    - hora : LocalTime
+    - data : String
+    - hora : String
     - numeroPessoas : int
     - observacoes : String
-    + Reserva(cliente: String, data: LocalDate, hora: LocalTime, mesas: List<Mesa>)
-    + getStatus() : StatusReserva
-    + setStatus(status: StatusReserva) : void
+    + toString() : String
+    + equals(obj: Object) : boolean
   }
   
   class ItemPedido {
@@ -136,43 +154,45 @@ package "dados" {
     - itemCardapio : ItemCardapio
     - quantidade : int
     - observacoesCliente : String
-    + ItemPedido(item: ItemCardapio, qtd: int, obs: String)
     + calcularSubtotal() : double
-    + setStatusPreparo(status : StatusItemPedido) : void
+    + toString() : String
+    + equals(obj: Object) : boolean
   }
   
   class Pagamento {
     - formaUtilizada : FormaPagamento
-    - data : LocalDate
-    - hora : LocalTime
+    - dataHora : String
     - valorPago : double
-    + Pagamento(forma: FormaPagamento, valor: double)
-    + getValorPago() : double
+    + toString() : String
+    + equals(obj: Object) : boolean
   }
   
   class Pedido {
-    - dataHoraAbertura : LocalDateTime
-    - mesa : Mesa
-    - garcom : Garcom
-    - itensPedido : List<ItemPedido>
-    - pagamentos : List<Pagamento>
-    + Pedido(mesa: Mesa, garcom: Garcom)
+    # dataHoraAbertura : String
+    # mesa : Mesa
+    # garcom : Garcom
+    # itensPedido : List<ItemPedido>
+    # pagamentos : List<Pagamento>
     + adicionarItem(item : ItemPedido) : void
     + adicionarPagamento(pag : Pagamento) : void
     + calcularTotal(incluirTaxa: boolean) : double
+    + toString() : String
+    + equals(obj: Object) : boolean
   }
   
   class PedidoDelivery {
     - statusEntrega : StatusEntrega
     - enderecoEntrega : String
     - taxaEntrega : double
-    + PedidoDelivery(endereco: String, taxa: double)
     + calcularTotal(incluirTaxa: boolean) : double
-    + setStatusEntrega(status : StatusEntrega) : void
+    + toString() : String
+    + equals(obj: Object) : boolean
   }
 }
 
 Pedido <|-- PedidoDelivery
+
+Main --> "1" Sistema : -sistema
 
 Sistema --> "0..*" Mesa : -mesas
 Sistema --> "0..*" ItemCardapio : -itensCardapio

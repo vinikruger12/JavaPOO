@@ -1,5 +1,0 @@
-package dados;
-
-public enum CategoriaItem {
-    ENTRADAS, PRATOS_PRINCIPAIS, SOBREMESAS, BEBIDAS_ALCOOLICAS, BEBIDAS_NAO_ALCOOLICAS
-}
