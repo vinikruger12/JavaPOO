@@ -1,7 +1,7 @@
 package dados;
 
 public enum StatusItemPedido {
-    AGUARDANDO_PREPARO("Aguardando preparo"), EM_PREPARO("Em prepara"),
+    AGUARDANDO_PREPARO("Aguardando preparo"), EM_PREPARO("Em preparo"),
     PRONTO("Pronto"), SERVIDO("Servido");
 
     private String statusItemPedido;

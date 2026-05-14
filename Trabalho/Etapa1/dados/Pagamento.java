@@ -12,12 +12,14 @@ public class Pagamento {
     public void setFormaUtilizada(FormaPagamento forma){
         this.formaUtilizada = forma; 
     }
+
     public double getValorPago(){
         return valorPago; 
     }
     public void setValorPago(double valor){
         this.valorPago = valor; 
     }
+    
     public String getDataHora(){
         return dataHora; 
     }

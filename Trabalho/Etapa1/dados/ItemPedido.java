@@ -9,23 +9,24 @@ public class ItemPedido {
     public ItemCardapio getItemCardapio(){
         return itemCardapio; 
     }
-    public int getQuantidade(){
-        return quantidade; 
-    }
-
     public void setItemCardapio(ItemCardapio itemCardapio) {
         this.itemCardapio = itemCardapio;
     }
 
+    public int getQuantidade(){
+        return quantidade; 
+    }
     public void setQuantidade(int quantidade){
         this.quantidade = quantidade; 
     }
+
     public String getObservacoesCliente(){
         return observacoesCliente; 
     }
     public void setObservacoesCliente(String observacoesCliente){
         this.observacoesCliente = observacoesCliente; 
     }
+    
     public StatusItemPedido getStatusPreparo(){
         return statusPreparo; 
     }

@@ -24,6 +24,7 @@ public class Main {
         System.out.println("Digite 9 para mostrar todas as mesas");
         System.out.println("Digite 10 para mostrar todos os garçons"); 
         System.out.println("Digite 11 para mostrar todos os itens do cardápio"); 
+        System.out.println("Digite 12 para atualizar o status de preparo de um item"); 
         System.out.println("======================================================");
         System.out.print("Escolha uma opção: ");
     }
@@ -39,7 +40,7 @@ public class Main {
             switch (opcao) {
                 case 0:
                     flag = false;
-                    System.out.println("Encerrando o sistema...");
+                    System.out.println("Encerrando o sistema.");
                     break;
                 case 1:
                     cadastrarMesa();
@@ -74,6 +75,9 @@ public class Main {
                 case 11:
                     mostrarTodosOsItensCardapio();
                     break;
+                case 12:
+                    atualizarStatusItem();
+                    break;
                 default:
                     System.out.println("Opção inválida!");
                     break;
@@ -94,9 +98,7 @@ public class Main {
 
         System.out.println("Escolha a localização: [0] Salão | [1] Varanda | [2] Mezanino");
         int loc = Integer.parseInt(in.nextLine());
-        if (loc == 1) m.setLocalizacao(LocalizacaoMesa.VARANDA);
-        else if (loc == 2) m.setLocalizacao(LocalizacaoMesa.MEZANINO);
-        else m.setLocalizacao(LocalizacaoMesa.SALAO);
+        m.setLocalizacao(LocalizacaoMesa.values()[loc]);
 
         sistema.cadastrarMesa(m);
         System.out.println("Mesa cadastrada com sucesso!");
@@ -144,15 +146,9 @@ public class Main {
         item.setDisponivel(true); 
 
         System.out.println("Escolha a categoria:");
-        System.out.println("[0] Entradas | [1] Pratos Principais | [2] Sobremesas | [3] Bebidas | [4] Bebidas Alcoólicas");
+        System.out.println("[0] Entradas | [1] Pratos Principais | [2] Sobremesas | [3] Bebidas Alcoólicas | [4] Bebidas não Alcoólicas");
         int cat = Integer.parseInt(in.nextLine());
-        switch (cat) {
-            case 0: item.setCategoria(CategoriaItem.ENTRADAS); break;
-            case 1: item.setCategoria(CategoriaItem.PRATOS_PRINCIPAIS); break;
-            case 2: item.setCategoria(CategoriaItem.SOBREMESAS); break;
-            case 4: item.setCategoria(CategoriaItem.BEBIDAS_ALCOOLICAS); break;
-            default: item.setCategoria(CategoriaItem.BEBIDAS_NAO_ALCOOLICAS); break;
-        }
+        item.setCategoria(CategoriaItem.values()[cat]);
 
         sistema.cadastrarItemCardapio(item);
         System.out.println("Item cadastrado com sucesso!");
@@ -205,7 +201,6 @@ public class Main {
 
         r.setStatus(StatusReserva.PENDENTE); 
 
-        // Listando e escolhendo a mesa
         List<Mesa> mesas = sistema.getMesas();
         if (mesas.isEmpty()) {
             System.out.println("Não há mesas cadastradas no sistema!");
@@ -247,6 +242,7 @@ public class Main {
         int numGarcom = Integer.parseInt(in.nextLine());
         p.setGarcom(garcons.get(numGarcom));
 
+        p.setDataHoraAbertura(java.time.LocalDateTime.now().toString());
         sistema.abrirPedido(p);
         System.out.println("Pedido aberto na mesa " + p.getMesa().getNumero() + "!");
     }
@@ -311,14 +307,11 @@ public class Main {
 
         Pagamento pag = new Pagamento();
         pag.setValorPago(total);
-        pag.setDataHora("Agora");
+        pag.setDataHora(java.time.LocalDateTime.now().toString());
 
         System.out.println("Forma de Pagamento: [0] Dinheiro | [1] Crédito | [2] Débito | [3] PIX");
         int forma = Integer.parseInt(in.nextLine());
-        if (forma == 0) pag.setFormaUtilizada(FormaPagamento.DINHEIRO);
-        else if (forma == 1) pag.setFormaUtilizada(FormaPagamento.CARTAO_CREDITO);
-        else if (forma == 2) pag.setFormaUtilizada(FormaPagamento.CARTAO_DEBITO);
-        else pag.setFormaUtilizada(FormaPagamento.PIX);
+        pag.setFormaUtilizada(FormaPagamento.values()[forma]);
 
         sistema.receberPagamento(pag, pedido);
         System.out.println("Pagamento registrado com sucesso. Conta finalizada!");
@@ -370,6 +363,47 @@ public class Main {
             System.out.println("[" + i + "] \n" + item);
             System.out.println("-------------------------");
         }
+    }
+
+    public void atualizarStatusItem() {
+        List<Pedido> pedidos = sistema.getPedidos();
+        if (pedidos.isEmpty()) {
+            System.out.println("Não há pedidos abertos no momento!");
+            return;
+        }
+
+        System.out.println("\n--- Atualizar Status da Cozinha ---");
+        System.out.println("Escolha o pedido (pela mesa):");
+        for (int i = 0; i < pedidos.size(); i++) {
+            System.out.println("[" + i + "] Mesa " + pedidos.get(i).getMesa().getNumero());
+        }
+        int numPedido = Integer.parseInt(in.nextLine());
+        Pedido pedido = pedidos.get(numPedido);
+
+        List<ItemPedido> itens = pedido.getItensPedido();
+        if (itens.isEmpty()) {
+            System.out.println("Este pedido ainda não possui itens!");
+            return;
+        }
+
+        System.out.println("Escolha o item para atualizar o status:");
+        for (int i = 0; i < itens.size(); i++) {
+            ItemPedido ip = itens.get(i);
+            System.out.println("[" + i + "] " + ip.getItemCardapio().getNome() + 
+                               " | Status atual: " + ip.getStatusPreparo().getStatusItemPedido());
+        }
+        int numItem = Integer.parseInt(in.nextLine());
+        ItemPedido itemP = itens.get(numItem);
+
+        System.out.println("Escolha o novo status:");
+        System.out.println("[0] Aguardando preparo | [1] Em preparo | [2] Pronto | [3] Servido");
+        int numStatus = Integer.parseInt(in.nextLine());
+
+        StatusItemPedido novoStatus;
+        novoStatus = StatusItemPedido.values()[numStatus];
+
+        sistema.atualizarStatusCozinha(itemP, novoStatus);
+        System.out.println("Status do item atualizado com sucesso para: " + novoStatus.getStatusItemPedido());
     }
 
 

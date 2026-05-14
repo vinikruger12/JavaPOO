@@ -4,35 +4,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pedido {
-    protected String dataHoraAbertura;
-    protected Mesa mesa;
-    protected Garcom garcom;
-    protected List<ItemPedido> itensPedido = new ArrayList<>();
-    protected List<Pagamento> pagamentos = new ArrayList<>();
+    private String dataHoraAbertura;
+    private Mesa mesa;
+    private Garcom garcom;
+    private List<ItemPedido> itensPedido = new ArrayList<>();
+    private List<Pagamento> pagamentos = new ArrayList<>();
 
+    public String getDataHoraAbertura() {
+        return dataHoraAbertura;
+    }
+    public void setDataHoraAbertura(String dataHoraAbertura) {
+        this.dataHoraAbertura = dataHoraAbertura;
+    }
+
+    public Mesa getMesa() {
+        return mesa;
+    }
     public void setMesa(Mesa mesa) {
         this.mesa = mesa;
+    }
+
+    public Garcom getGarcom() {
+        return garcom;
     }
     public void setGarcom(Garcom garcom) {
         this.garcom = garcom;
     }
 
-
-    public String getDataHoraAbertura(){
-        return dataHoraAbertura; 
+    public List<ItemPedido> getItensPedido() {
+        return itensPedido;
     }
-    public Mesa getMesa(){
-        return mesa; 
-    }
-
-    public Garcom getGarcom(){
-        return garcom; 
-    }
-    public List<ItemPedido> getItensPedido(){
-        return itensPedido; 
-    }
-    public List<Pagamento> getPagamentos(){
-        return pagamentos; 
+    public List<Pagamento> getPagamentos() {
+        return pagamentos;
     }
 
     public void adicionarItem(ItemPedido item){
@@ -47,7 +50,8 @@ public class Pedido {
         for(ItemPedido ip : itensPedido){
             total += ip.calcularSubtotal();
         }
-        return incluirTaxa ? total * 1.10 : total;
+        if(incluirTaxa) return (total*(1.10));
+        return total;
     }
 
     public String toString() {

@@ -75,7 +75,6 @@ public class Sistema {
         reservas.add(reserva);
     }
 
-
     public void abrirPedido(Pedido pedido) {
         pedidos.add(pedido);
     }
@@ -91,7 +90,6 @@ public class Sistema {
     public void atualizarStatusCozinha(ItemPedido itemPedido, StatusItemPedido status) {
         itemPedido.setStatusPreparo(status);
     }
-
 
     public double fecharConta(Pedido pedido, boolean incluirTaxa) {
         return pedido.calcularTotal(incluirTaxa);

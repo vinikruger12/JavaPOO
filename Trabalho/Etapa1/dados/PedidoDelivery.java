@@ -27,7 +27,7 @@ public class PedidoDelivery extends Pedido {
     }
 
     public double calcularTotal(boolean incluirTaxa) {
-        return super.calcularTotal(false) + taxaEntrega;
+        return super.calcularTotal(incluirTaxa) + taxaEntrega;
     }
 
     public String toString() {
@@ -39,7 +39,7 @@ public class PedidoDelivery extends Pedido {
     public boolean equals(Object obj) {
         if (obj instanceof PedidoDelivery) {
             PedidoDelivery pd = (PedidoDelivery) obj;
-            if (super.equals(obj) // Compara os campos da classe pai (Pedido)
+            if (super.equals(obj) 
                 && this.enderecoEntrega.equals(pd.getEnderecoEntrega())
                 && this.statusEntrega == pd.getStatusEntrega()) return true;
         }

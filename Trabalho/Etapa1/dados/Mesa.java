@@ -11,12 +11,14 @@ public class Mesa {
     public void setNumero(int numero){
         this.numero = numero; 
     }
+
     public int getCapacidadePessoas(){
         return capacidadePessoas; 
     }
     public void setCapacidadePessoas(int capacidadePessoas){
         this.capacidadePessoas = capacidadePessoas; 
     }
+    
     public LocalizacaoMesa getLocalizacao(){
         return localizacao; 
     }

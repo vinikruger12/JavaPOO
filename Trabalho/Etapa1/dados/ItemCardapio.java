@@ -20,42 +20,49 @@ public class ItemCardapio {
     public void setCodigo(String codigo){
         this.codigo = codigo; 
     }
+
     public String getNome(){
         return nome; 
     }
     public void setNome(String nome){
         this.nome = nome; 
     }
+
     public String getDescricao(){
         return descricao; 
     }
     public void setDescricao(String descricao){
         this.descricao = descricao; 
     }
+
     public double getPreco(){
         return preco; 
     }
     public void setPreco(double preco){
         this.preco = preco; 
     }
+
     public int getTempoMedioPreparo(){
         return tempoMedioPreparo; 
     }
     public void setTempoMedioPreparo(int tempoMedioPreparo){
         this.tempoMedioPreparo = tempoMedioPreparo; 
     }
+
     public boolean isDisponivel(){
         return disponivel; 
     }
     public void setDisponivel(boolean disponivel){
         this.disponivel = disponivel; 
     }
+
     public CategoriaItem getCategoria(){
         return categoria; 
     }
     public void setCategoria(CategoriaItem categoria){
         this.categoria = categoria; 
     }
+    
     public List<ItemCardapio> getComponentes(){
         return componentes; 
     }
