@@ -26,6 +26,7 @@ public class Main {
         System.out.println("Digite 11 para mostrar todos os itens do cardápio"); 
         System.out.println("Digite 12 para atualizar o status de preparo de um item"); 
         System.out.println("Digite 13 para abrir um pedido Delivery"); 
+        System.out.println("Digite 14 para mostrar todos os pedidos");
         System.out.println("======================================================");
         System.out.print("Escolha uma opção: ");
     }
@@ -81,6 +82,9 @@ public class Main {
                     break;
                 case 13:
                     abrirPedidoDelivery();
+                    break;
+                case 14:
+                    mostrarTodosPedidos();
                     break;
                 default:
                     System.out.println("Opção inválida!");
@@ -205,24 +209,53 @@ public class Main {
 
         r.setStatus(StatusReserva.PENDENTE); 
 
-        List<Mesa> mesas = sistema.getMesas();
+        List<Mesa> mesas = sistema.buscarMesaDisponivel(0, r.getData(), r.getHora());
         if (mesas.isEmpty()) {
             System.out.println("Não há mesas cadastradas no sistema!");
             return;
         }
 
-        System.out.println("Escolha a mesa para a reserva:");
-        for (int i = 0; i < mesas.size(); i++) {
-            System.out.println("[" + i + "] Mesa " + mesas.get(i).getNumero());
-        }
-        int numMesa = Integer.parseInt(in.nextLine());
         List<Mesa> mesasReserva = new ArrayList<>();
-        mesasReserva.add(mesas.get(numMesa));
-        r.setMesas(mesasReserva);
+        boolean adicionandoMesas = true;
+        int capacidadeAtual = 0;
 
+        while(adicionandoMesas){
+            System.out.println("\n--- Mesas Livres ---");
+
+            for(int i = 0; i < mesas.size(); i++){
+                if(!mesasReserva.contains(mesas.get(i))){
+                    Mesa m = mesas.get(i);
+                    System.out.println("[" + i + "] Mesa " + m.getNumero() + " (Capacidade: " + m.getCapacidadePessoas() + ")");
+                }
+            }
+            
+            System.out.print("Escolha o índice da mesa: ");
+            int numMesa = Integer.parseInt(in.nextLine());
+            
+            if(numMesa >= 0 && numMesa < mesas.size() && !mesasReserva.contains(mesas.get(numMesa))){
+                Mesa mesaEscolhida = mesas.get(numMesa);
+                mesasReserva.add(mesaEscolhida);
+                capacidadeAtual += mesaEscolhida.getCapacidadePessoas();
+                
+                System.out.println("Mesa " + mesaEscolhida.getNumero() + " adicionada!");
+                System.out.println("Capacidade total da reserva até agora: " + capacidadeAtual + " pessoas.");
+            }else{
+                System.out.println("Opção inválida ou mesa já adicionada!");
+            }
+
+            System.out.print("\nDeseja adicionar mais uma mesa a esta reserva? (1 = Sim, 0 = Não): ");
+            
+            int resp = Integer.parseInt(in.nextLine());
+            if(resp == 0){
+                adicionandoMesas = false;
+            }
+        }
+
+        r.setMesas(mesasReserva);
         sistema.fazerReserva(r);
         System.out.println("Reserva realizada com sucesso!");
     }
+    
 
     public void abrirPedido() {
         Pedido p = new Pedido();
@@ -407,7 +440,20 @@ public class Main {
         novoStatus = StatusItemPedido.values()[numStatus];
 
         sistema.atualizarStatusCozinha(itemP, novoStatus);
+        
         System.out.println("Status do item atualizado com sucesso para: " + novoStatus.getStatusItemPedido());
+
+        if(pedido instanceof PedidoDelivery && novoStatus == StatusItemPedido.SERVIDO){
+            PedidoDelivery delivery = (PedidoDelivery) pedido;
+            delivery.setStatusEntrega(StatusEntrega.ENTREGUE);
+            System.out.println("-> Status do Delivery atualizado automaticamente para: ENTREGUE!");
+        }
+        else if(pedido instanceof PedidoDelivery && novoStatus == StatusItemPedido.PRONTO){
+            PedidoDelivery delivery = (PedidoDelivery) pedido;
+            delivery.setStatusEntrega(StatusEntrega.SAIU_PARA_ENTREGA);
+            System.out.println("-> Status do Delivery atualizado automaticamente para: SAIU PARA ENTREGA!");
+        }
+
     }
 
     public void abrirPedidoDelivery() {
@@ -449,6 +495,22 @@ public class Main {
 
         sistema.abrirPedidoDelivery(pd);
         System.out.println("Pedido Delivery aberto com sucesso para: " + pd.getEnderecoEntrega() + "!");
+    }
+
+    public void mostrarTodosPedidos(){
+        List<Pedido> pedidos = sistema.getPedidos();
+        System.out.println("\n--- Lista de Pedidos ---");
+
+        if(pedidos.isEmpty()){
+            System.out.println("Nenhum pedido aberto.");
+            return;
+        }
+
+        for(int i = 0; i < pedidos.size(); i++){
+            Pedido p = pedidos.get(i);
+            System.out.println("[" + i + "] " + p);
+            System.out.println("-------------------------");
+        }
     }
 
 
