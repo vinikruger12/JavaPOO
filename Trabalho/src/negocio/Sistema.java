@@ -1,7 +1,6 @@
 package negocio;
 
 import dados.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,9 +45,9 @@ public class Sistema {
     public List<Mesa> buscarMesaDisponivel(int capacidadeDesejada, String data, String hora) {
         List<Mesa> mesasDisponiveis = new ArrayList<>();
         
-        for (Mesa mesa : mesas) {
-            if (mesa.getCapacidadePessoas() >= capacidadeDesejada) {
-                if (isMesaLivre(mesa, data, hora)) {
+        for(Mesa mesa : mesas){
+            if(mesa.getCapacidadePessoas() >= capacidadeDesejada){
+                if(isMesaLivre(mesa, data, hora)) {
                     mesasDisponiveis.add(mesa);
                 }
             }
@@ -57,11 +56,11 @@ public class Sistema {
         return mesasDisponiveis;
     }
 
-    private boolean isMesaLivre(Mesa mesa, String data, String hora) {
-        for (Reserva r : reservas) {
+    private boolean isMesaLivre(Mesa mesa, String data, String hora){
+        for(Reserva r : reservas){
             if(r.getStatus() != StatusReserva.CANCELADA) {                
-                if (r.getData().equals(data) && r.getHora().equals(hora)){
-                    if (r.getMesas().contains(mesa)) {
+                if(r.getData().equals(data) && r.getHora().equals(hora)){
+                    if(r.getMesas().contains(mesa)) {
                         return false;
                     }
                 }

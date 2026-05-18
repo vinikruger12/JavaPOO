@@ -25,6 +25,7 @@ public class Main {
         System.out.println("Digite 10 para mostrar todos os garçons"); 
         System.out.println("Digite 11 para mostrar todos os itens do cardápio"); 
         System.out.println("Digite 12 para atualizar o status de preparo de um item"); 
+        System.out.println("Digite 13 para abrir um pedido Delivery"); 
         System.out.println("======================================================");
         System.out.print("Escolha uma opção: ");
     }
@@ -77,6 +78,9 @@ public class Main {
                     break;
                 case 12:
                     atualizarStatusItem();
+                    break;
+                case 13:
+                    abrirPedidoDelivery();
                     break;
                 default:
                     System.out.println("Opção inválida!");
@@ -404,6 +408,47 @@ public class Main {
 
         sistema.atualizarStatusCozinha(itemP, novoStatus);
         System.out.println("Status do item atualizado com sucesso para: " + novoStatus.getStatusItemPedido());
+    }
+
+    public void abrirPedidoDelivery() {
+        PedidoDelivery pd = new PedidoDelivery();
+        System.out.println("\n--- Abrir Pedido Delivery ---");
+
+        List<Mesa> mesas = sistema.getMesas();
+        if (mesas.isEmpty()) {
+            System.out.println("Cadastre uma mesa primeiro! (Deliveries precisam de uma 'mesa virtual' ou 'caixa' no sistema atual)");
+            return;
+        }
+        System.out.println("Escolha a mesa/caixa associada a este delivery:");
+        for (int i = 0; i < mesas.size(); i++) {
+            System.out.println("[" + i + "] Mesa " + mesas.get(i).getNumero());
+        }
+        int numMesa = Integer.parseInt(in.nextLine());
+        pd.setMesa(mesas.get(numMesa));
+
+        List<Garcom> garcons = sistema.getGarcons();
+        if (garcons.isEmpty()) {
+            System.out.println("Cadastre um garçom/atendente primeiro!");
+            return;
+        }
+        System.out.println("Escolha o atendente responsável pelo delivery:");
+        for (int i = 0; i < garcons.size(); i++) {
+            System.out.println("[" + i + "] " + garcons.get(i).getNome());
+        }
+        int numGarcom = Integer.parseInt(in.nextLine());
+        pd.setGarcom(garcons.get(numGarcom));
+
+        System.out.print("Digite o endereço de entrega: ");
+        pd.setEnderecoEntrega(in.nextLine());
+
+        System.out.print("Digite a taxa de entrega: R$ ");
+        pd.setTaxaEntrega(Double.parseDouble(in.nextLine()));
+
+        pd.setStatusEntrega(StatusEntrega.PREPARANDO);
+        pd.setDataHoraAbertura(java.time.LocalDateTime.now().toString());
+
+        sistema.abrirPedidoDelivery(pd);
+        System.out.println("Pedido Delivery aberto com sucesso para: " + pd.getEnderecoEntrega() + "!");
     }
 
 
