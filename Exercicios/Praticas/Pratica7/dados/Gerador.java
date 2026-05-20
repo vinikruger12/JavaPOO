@@ -15,7 +15,7 @@ public abstract class Gerador implements iSequencia {
 
     public int sortear(){
         Random r = new Random();
-        return sequencia.get(r.nextInt(sequencia.size() - 1));
+        return sequencia.get(r.nextInt(sequencia.size()));
     }
 
     public long somatorio(){
