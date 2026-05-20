@@ -27,7 +27,7 @@ public abstract class Gerador implements iSequencia {
     }
 
     public double mediaAritmetica(){
-        return (this.somatorio()/sequencia.size());
+        return (this.somatorio()/(double)sequencia.size());
     }
 
     public double mediaGeometrica(){
