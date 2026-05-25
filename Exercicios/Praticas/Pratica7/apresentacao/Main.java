@@ -1,6 +1,15 @@
-package dados;
+package apresentacao;
 import java.util.List;
 import java.util.Scanner;
+
+import dados.Abundantes;
+import dados.Fatorial;
+import dados.Fibonacci;
+import dados.Gerador;
+import dados.Naturais;
+import dados.Perfeitos;
+import dados.Primos;
+import dados.Quadrado;
 
 public class Main {
 
