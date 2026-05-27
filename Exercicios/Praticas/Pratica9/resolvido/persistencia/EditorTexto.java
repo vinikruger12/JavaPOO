@@ -3,7 +3,7 @@ package persistencia;
 import java.util.List;
 import java.util.Scanner;
 
-import exceptions.ErroNaLeituraException;
+import exceptions.*;
 
 import java.util.ArrayList;
 import java.io.FileReader;
@@ -14,7 +14,7 @@ import java.io.Writer;
 
 public class EditorTexto{
     
-    public List<String> leTexto(String caminho){
+    public List<String> leTexto(String caminho) throws ErroNaLeituraException {
         List<String> dados = new ArrayList<>();
 
         Reader arquivo;
@@ -29,13 +29,15 @@ public class EditorTexto{
             }
             arquivo.close();
         }
-        catch(ErroNaLeituraException e){
-            System.err.println("Erro na leitura do arquivo.");
+        catch(IOException e){
+            ErroNaLeituraException el = new ErroNaLeituraException("Não foi possível abrir o arquivo!");
+            el.setCaminho(caminho);
+            throw el;
         }
         return dados;
     }
 
-    public void gravaTexto(String caminho, List<String> dados){
+    public void gravaTexto(String caminho, List<String> dados) throws ErroNaEscritaException {
         Writer arquivo;
 
         try{
@@ -46,7 +48,9 @@ public class EditorTexto{
             arquivo.close();
         }
         catch(IOException e){
-            System.err.println("Erro na escrita do arquivo.");
+            ErroNaEscritaException eg = new ErroNaEscritaException("Não foi possível abrir o arquivo!");
+            eg.setCaminho(caminho);
+            throw eg;
         }
     }
 

@@ -2,10 +2,12 @@ package persistencia;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import dados.*;
+import exceptions.*;
 
 public class ArquivoContatoDAO {
-    private String caminho = "/Users/viniciuskruger/Documents/Estudos/JavaPOO/Exercicios/Praticas/Pratica8/exercicio/contatos.txt";
+    private String caminho = "/Users/viniciuskruger/Documents/Estudos/JavaPOO/Exercicios/Praticas/Pratica9/resolvido/contatos.txt";
 
     private EditorTexto editarTexto = new EditorTexto();
 
@@ -45,11 +47,11 @@ public class ArquivoContatoDAO {
         return listaContatos;
     }
 
-    public List<Contato> leContatos(){
+    public List<Contato> leContatos() throws ErroNaLeituraException{
         return stringToListaContatos(editarTexto.leTexto(caminho));
     }
 
-    public void salvaContatos(List<Contato> contatos){
+    public void salvaContatos(List<Contato> contatos) throws ErroNaEscritaException {
         editarTexto.gravaTexto(caminho, listaContatosString(contatos));
     }
 

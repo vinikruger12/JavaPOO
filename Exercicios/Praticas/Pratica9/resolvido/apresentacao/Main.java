@@ -1,7 +1,9 @@
 package apresentacao;
 
 import java.util.*;
+
 import dados.*;
+import exceptions.*;
 import negocio.*;
 
 public class Main {
@@ -20,13 +22,43 @@ public class Main {
                     flag = false;
                     break;
                 case 1:
-                    adicionarContato();
+                    try{
+                        adicionarContato();
+                    }
+                    catch(ContatojaCadastradoException cj){
+                        System.err.println(cj.getMessage());
+                    }
+                    catch(ErroNaLeituraException el){
+                        System.err.println(el.getMessage());
+                    }
+                    catch(ErroNaEscritaException eg){
+                        System.err.println(eg.getMessage());
+                    }
                     break;
                 case 2:
-                    removerContato();
+                    try{
+                        removerContato();
+                    }
+                    catch(ContatoNaoCadastradoException cn){
+                        System.err.println(cn.getMessage());
+                    }
+                    catch(ContatojaCadastradoException cj){
+                        System.err.println(cj.getMessage());
+                    }
+                    catch(ErroNaLeituraException el){
+                        System.err.println(el.getMessage());
+                    }
+                    catch(ErroNaEscritaException eg){
+                        System.err.println(eg.getMessage());
+                    }
                     break;
                 case 3:
-                    exibirContatos();
+                    try{
+                        exibirContatos();
+                    }
+                    catch(ErroNaLeituraException el){
+                        System.err.println(el.getMessage());
+                    }
                     break;
                 default:
                     System.out.println("Opção inválida.");
@@ -43,7 +75,7 @@ public class Main {
         System.out.println("Digite 3 para exibir todos os contatos");
     }
 
-    public void adicionarContato() {
+    public void adicionarContato() throws ErroNaEscritaException, ErroNaLeituraException, ContatojaCadastradoException{
         Contato user = new Contato();
         
         System.out.println("Digite o nome do contato:");
@@ -56,7 +88,7 @@ public class Main {
         System.out.println("Contato adicionado com sucesso!");
     }
 
-    public void removerContato() {
+    public void removerContato() throws ErroNaEscritaException, ErroNaLeituraException, ContatoNaoCadastradoException, ContatojaCadastradoException{
         System.out.println("\n--- Remoção de Contato ---");
         exibirContatos();
 
@@ -71,7 +103,7 @@ public class Main {
         System.out.println("Comando de remoção concluído.");
     }
 
-    public void exibirContatos() {
+    public void exibirContatos() throws ErroNaLeituraException{
         Map<Character, List<Contato>> mapa = listaTelefonica.listarContatos(); 
         
         if (mapa == null || mapa.isEmpty()) {
