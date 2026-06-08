@@ -1,6 +1,7 @@
 package apresentacao;
 
 import dados.CalculadoraEstatistica;
+import javax.swing.table.AbstractTableModel;
 
 public class TabelaResultados extends AbstractTableModel{
     
@@ -40,6 +41,10 @@ public class TabelaResultados extends AbstractTableModel{
             }
         }
         return " - ";
+    }
+
+    public void atualizar(){
+        fireTableStructureChanged();
     }
     
 

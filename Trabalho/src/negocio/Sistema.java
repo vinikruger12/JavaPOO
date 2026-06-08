@@ -99,5 +99,29 @@ public class Sistema {
     public void receberPagamento(Pagamento pagamento, Pedido pedido) {
         pedido.adicionarPagamento(pagamento);
     }
+
+    public List<Reserva> getReservasPorStatus(StatusReserva status) {
+    List<Reserva> resultado = new ArrayList<>();
+    for (Reserva r : reservas) {
+        if (r.getStatus() == status) {
+            resultado.add(r);
+        }
+    }
+    return resultado;
+}
+
+public void atualizarStatusReserva(Reserva reserva, StatusReserva status) {
+    reserva.setStatus(status);
+}
+
+public double calcularComissaoGarcom(Garcom garcom) {
+    double total = 0;
+    for (Pedido p : pedidos) {
+        if (p.getGarcom() != null && p.getGarcom().equals(garcom)) {
+            total += p.calcularTotal(false) * garcom.getPercentualComissao();
+        }
+    }
+    return total;
+}
     
 }
