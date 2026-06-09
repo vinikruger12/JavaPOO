@@ -11,7 +11,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
+import dados.Gerador;
+
 import javax.swing.JTable;
+
+import dados.Fibonacci;
+import dados.Primos;
+import dados.Fatorial;
 
 public class Calculadora extends JFrame{
 
@@ -20,6 +27,12 @@ public class Calculadora extends JFrame{
     private JPanel painelEntrada = new JPanel();
     private JScrollPane painelScrollTabelaResultados = new JScrollPane();
     private JScrollPane painelScrollTabelaValores = new JScrollPane();
+
+    private JPanel painelGeradores = new JPanel();
+    private JTextField caixaQuantidade = new JTextField();
+    private JButton botaoFibonacci = new JButton("Fibonacci");
+    private JButton botaoPrimos = new JButton("Primos");
+    private JButton botaoFatorial = new JButton("Fatorial");
 
     private JLabel infoCaixaEntrada = new JLabel("Digite um valor");
     private JTextField caixaEntrada = new JTextField();
@@ -76,6 +89,23 @@ public class Calculadora extends JFrame{
         tabelaValores = new JTable(valores);
         painelScrollTabelaValores.setViewportView(tabelaValores);
 
+        painelGeradores.setBounds(500, 80, 180, 173);
+        painelGeradores.setLayout(null);
+        painelGeradores.setBorder(BorderFactory.createTitledBorder("Gerar Valores"));
+        painel.add(painelGeradores);
+
+        caixaQuantidade.setBounds(30, 30, 120, 20);
+        painelGeradores.add(caixaQuantidade);
+
+        botaoFibonacci.setBounds(30, 65, 120, 25);
+        painelGeradores.add(botaoFibonacci);
+
+        botaoPrimos.setBounds(30, 95, 120, 25);
+        painelGeradores.add(botaoPrimos);
+
+        botaoFatorial.setBounds(30, 125, 120, 25);
+        painelGeradores.add(botaoFatorial);
+
         botaoAdicionar.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e){
                 valores.adicionarValor(Integer.parseInt(caixaEntrada.getText()));
@@ -100,7 +130,51 @@ public class Calculadora extends JFrame{
             }
         });
         
+        botaoFibonacci.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                int qtd = Integer.parseInt(caixaQuantidade.getText());
+                Gerador fib = new Fibonacci();
+                fib.gerar(qtd);
+                
+                for(int val : fib.getSequencia()){
+                    valores.adicionarValor(val);
+                }
+                
+                resultados.atualizar();
+                caixaQuantidade.setText("");
+            }
+        });
 
+        botaoPrimos.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                int qtd = Integer.parseInt(caixaQuantidade.getText());
+                Gerador pri = new Primos();
+                pri.gerar(qtd);
+                
+                for(int val : pri.getSequencia()){
+                    valores.adicionarValor(val);
+                }
+                
+                resultados.atualizar();
+                caixaQuantidade.setText("");
+            }
+        });
+
+        botaoFatorial.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                int qtd = Integer.parseInt(caixaQuantidade.getText());
+                Gerador fat = new Fatorial();
+                fat.gerar(qtd);
+                
+                for(int val : fat.getSequencia()){
+                    valores.adicionarValor(val);
+                }
+                
+                resultados.atualizar();
+                caixaQuantidade.setText("");
+            }
+        });
+        
     }
 
     public static void main(String[] args){

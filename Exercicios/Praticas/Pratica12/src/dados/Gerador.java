@@ -1,4 +1,4 @@
-package Exercicios.Praticas.Pratica12.parte1.dados;
+package dados;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

@@ -1,4 +1,4 @@
-package Exercicios.Praticas.Pratica12.parte1.dados;
+package dados;
 
 
 public class Fatorial extends Gerador{
